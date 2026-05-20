@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://fonts.cdnfonts.com/css/rency" rel="stylesheet">
+  <style>
+     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --bg: #eef1f6;
+      --card-bg: #ffffff;
+      --primary: #1a56db;
+      --primary-hover: #1648c0;
+      --text-dark: #0d1f3c;
+      --text-muted: #8a93a6;
+      --text-link: #1a56db;
+      --border: #dde3ee;
+      --input-bg: #ffffff;
+      --shadow: 0 8px 40px rgba(26, 86, 219, 0.08), 0 2px 8px rgba(0,0,0,0.04);
+      --radius: 12px;
+      --font: 'Rency', sans-serif;
+    }
+ 
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+ 
+    /* ── NAV ── */
+    header {
+      padding: 20px 40px;
+    }
+ 
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+ 
+    .logo svg { width: 32px; height: 32px; }
+ 
+    .logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.3px;
+    }
+ 
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 40px;
+      gap: 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+ 
+    /* ── LEFT ── */
+    .hero {
+      flex: 1;
+    }
+ 
+    .hero h1 {
+      font-size: 44px;
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+ 
+    .hero p {
+      font-size: 17px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+ 
+    .new-user {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+ 
+    .new-user a {
+      color: var(--text-link);
+      font-weight: 600;
+      text-decoration: none;
+    }
+ 
+    .new-user a:hover { text-decoration: underline; }
+ 
+    /* ── CARD ── */
+    .card {
+      width: 420px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 40px 36px;
+      box-shadow: var(--shadow);
+      animation: fadeUp 0.5s ease both;
+    }
+ 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+ 
+    /* ── SOCIAL BUTTONS ── */
+    .social-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+ 
+    .btn-social {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-family: var(--font);
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+ 
+    .btn-social:hover {
+      border-color: #b0bcd8;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      background: #f7f9fc;
+    }
+ 
+    .btn-social svg, .btn-social img { width: 18px; height: 18px; flex-shrink: 0; }
+ 
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+ 
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+ 
+    /* ── INPUTS ── */
+    .field {
+      position: relative;
+      margin-bottom: 16px;
+    }
+ 
+    .field input {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: var(--font);
+      font-size: 14.5px;
+      color: var(--text-dark);
+      background: var(--input-bg);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+ 
+    .field input::placeholder { color: var(--text-muted); }
+ 
+    .field input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+    }
+ 
+    .field .eye-btn {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+ 
+    .field .eye-btn:hover { color: var(--text-dark); }
+ 
+    /* ── FORGOT ── */
+    .forgot {
+      display: inline-block;
+      margin-top: 4px;
+      margin-bottom: 24px;
+      font-size: 13.5px;
+      color: var(--text-link);
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+ 
+    .forgot:hover { text-decoration: underline; }
+ 
+    /* ── SIGN IN BTN ── */
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: #fff;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      letter-spacing: 0.1px;
+    }
+ 
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 16px rgba(26, 86, 219, 0.28);
+    }
+ 
+    .btn-primary:active { transform: scale(0.98); }
+ 
+    /* ── FOOTER ── */
+    footer {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+ 
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--text-dark); }
+ 
+    .footer-trouble strong { color: var(--text-link); cursor: pointer; font-weight: 600; }
+ 
+    .footer-links { display: flex; gap: 16px; align-items: center; }
+    .footer-links span { color: var(--border); }
+ 
+    /* ── FAB ── */
+    .fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(26,86,219,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+ 
+    .fab:hover { transform: scale(1.08); box-shadow: 0 6px 22px rgba(26,86,219,0.45); }
+ 
+    /* ── RESPONSIVE DESIGN ── */
+    @media (max-width: 1024px) {
+      main {
+        padding: 30px 20px;
+        gap: 40px;
+      }
+ 
+      header {
+        padding: 16px 20px;
+      }
+ 
+      .logo svg {
+        width: 28px;
+        height: 28px;
+      }
+ 
+      .logo-text {
+        font-size: 16px;
+      }
+ 
+      .hero h1 {
+        font-size: 36px;
+      }
+ 
+      .card {
+        width: 100%;
+        max-width: 420px;
+        padding: 32px 28px;
+      }
+    }
+ 
+    @media (max-width: 768px) {
+      main {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px;
+        gap: 24px;
+      }
+ 
+      header {
+        padding: 12px 16px;
+      }
+ 
+      .logo svg {
+        width: 24px;
+        height: 24px;
+      }
+ 
+      .logo-text {
+        font-size: 14px;
+      }
+ 
+      .hero {
+        text-align: center;
+        width: 100%;
+      }
+ 
+      .hero h1 {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+ 
+      .hero p {
+        font-size: 15px;
+        margin-bottom: 16px;
+      }
+ 
+      .new-user {
+        font-size: 13px;
+      }
+ 
+      .card {
+        width: 100%;
+        max-width: 100%;
+        padding: 24px 20px;
+        border-radius: 16px;
+      }
+ 
+      .btn-social {
+        font-size: 12px;
+        padding: 10px 12px;
+      }
+ 
+      .btn-social svg {
+        width: 16px;
+        height: 16px;
+      }
+ 
+      footer {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+        text-align: center;
+      }
+ 
+      .footer-links {
+        justify-content: center;
+      }
+ 
+      .fab {
+        width: 48px;
+        height: 48px;
+        bottom: 16px;
+        right: 16px;
+      }
+    }
+ 
+    @media (max-width: 480px) {
+      main {
+        padding: 16px 12px;
+      }
+ 
+      header {
+        padding: 8px 12px;
+      }
+ 
+      .logo-text {
+        font-size: 12px;
+      }
+ 
+      .hero h1 {
+        font-size: 24px;
+        margin-bottom: 6px;
+      }
+ 
+      .hero p {
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+ 
+      .new-user {
+        font-size: 12px;
+      }
+ 
+      .card {
+        padding: 20px 16px;
+        border-radius: 14px;
+      }
+ 
+      .social-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+ 
+      .btn-social {
+        font-size: 11px;
+        padding: 9px 10px;
+      }
+ 
+      .divider {
+        margin-bottom: 20px;
+        font-size: 12px;
+      }
+ 
+      .field {
+        margin-bottom: 14px;
+      }
+ 
+      .field input {
+        padding: 12px 14px;
+        font-size: 14px;
+        border-radius: 8px;
+      }
+ 
+      .field .eye-btn {
+        right: 12px;
+      }
+ 
+      .forgot {
+        font-size: 12px;
+        margin-bottom: 20px;
+      }
+ 
+      .btn-primary {
+        padding: 12px;
+        font-size: 14px;
+        border-radius: 8px;
+      }
+ 
+      footer {
+        padding: 12px;
+        font-size: 11px;
+        gap: 8px;
+      }
+ 
+      .fab {
+        width: 44px;
+        height: 44px;
+        bottom: 12px;
+        right: 12px;
+      }
+
+      
+    } 
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="interface.html">
+      <!-- Cowrywise-style spiral icon -->
+       <div class="logo-img"><img src="/images/logo CW.png" alt=""></div>
+    </a>
+  </header>
+ 
+  <main>
+    <div class="hero">
+      <h1>Jump right in</h1>
+      <p>Sign in to continue</p>
+      <p class="new-user">New user? <a href="signup.html">Create account</a></p>
+    </div>
+ 
+    <div class="card">
+      <!-- Social -->
+      <div class="social-row">
+        <button class="btn-social">
+          <!-- Google G -->
+          <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/>
+            <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332Z" fill="#FBBC05"/>
+            <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
+          </svg>
+          Sign in with Google
+        </button>
+        <button class="btn-social">
+          <!-- Apple  -->
+          <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.26 0c.07.93-.27 1.85-.81 2.54-.55.7-1.42 1.23-2.3 1.17-.09-.87.3-1.78.83-2.43C10.56.6 11.46.1 12.26 0Zm3.27 6.32c-.08.05-2.18 1.26-2.16 3.75.03 2.98 2.6 3.97 2.63 3.98-.03.08-.41 1.41-1.36 2.78-.83 1.2-1.7 2.39-3.02 2.41-1.29.03-1.71-.77-3.19-.77-1.49 0-1.95.75-3.17.8-1.28.04-2.26-1.28-3.1-2.47C.73 14.27-.66 10.85.43 7.95c.53-1.43 1.5-2.62 2.76-3.37A4.86 4.86 0 0 1 5.62 4c1.24-.02 2.42.84 3.18.84.77 0 2.2-1.04 3.7-.89.63.03 2.4.26 3.53 1.9l-.5.47Z" fill="#000"/>
+          </svg>
+          Sign in with Apple
+        </button>
+      </div>
+ 
+      <div class="divider">or</div>
+ 
+      <!-- Email -->
+      <div class="field">
+        <input type="email" placeholder="Email Address" autocomplete="email"/>
+      </div>
+ 
+      <!-- Password -->
+      <div class="field">
+        <input type="password" id="pwInput" placeholder="Password" autocomplete="current-password"/>
+        <button class="eye-btn" onclick="togglePw()" aria-label="Toggle password visibility">
+          <svg id="eyeIcon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </button>
+      </div>
+ 
+      <a class="forgot" href="#">Forgot password?</a>
+ 
+      <button class="btn-primary">Sign in</button>
+    </div>
+  </main>
+ 
+  <footer>
+    <p class="footer-trouble">Trouble signing in? <strong>Chat with us</strong></p>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <span>|</span>
+      <a href="#">Terms</a>
+    </div>
+  </footer>
+ 
+  <button class="fab" aria-label="Chat">
+    <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  </button>
+ 
+  <script>
+    function togglePw() {
+      const inp = document.getElementById('pwInput');
+      const icon = document.getElementById('eyeIcon');
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.innerHTML = `
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+          <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+          <line x1="1" y1="1" x2="23" y2="23"/>`;
+      } else {
+        inp.type = 'password';
+        icon.innerHTML = `
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>`;
+      }
+    }
+  </script>
+</body>
+</html>

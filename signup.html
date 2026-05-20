@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="https://fonts.cdnfonts.com/css/rency" rel="stylesheet">
+    <style>
+         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --bg: #eef1f6;
+      --card-bg: #ffffff;
+      --primary: #1a56db;
+      --primary-hover: #1648c0;
+      --text-dark: #0d1f3c;
+      --text-muted: #8a93a6;
+      --text-link: #1a56db;
+      --border: #dde3ee;
+      --shadow: 0 8px 40px rgba(26,86,219,0.08), 0 2px 8px rgba(0,0,0,0.04);
+      --font: 'Rency', sans-serif;
+    }
+ 
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+ 
+    /* ── HEADER ── */
+    header { padding: 18px 40px; flex-shrink: 0; }
+ 
+    .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+ 
+    .logo-text {
+      font-size: 18px; font-weight: 700;
+      color: var(--primary); letter-spacing: -0.3px;
+    }
+ 
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 24px 60px;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+ 
+    /* ── CARD ── */
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 48px 44px 44px;
+      box-shadow: var(--shadow);
+      animation: fadeUp 0.5s ease both;
+      width: 100%;
+    }
+ 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+ 
+    .card h1 {
+      font-size: clamp(28px, 3.5vw, 46px);
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+ 
+    .signin-note { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
+    .signin-note a { color: var(--text-link); font-weight: 600; text-decoration: none; }
+    .signin-note a:hover { text-decoration: underline; }
+ 
+    /* ── GOOGLE BTN ── */
+    .btn-google {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      margin-bottom: 20px;
+      white-space: nowrap;
+    }
+    .btn-google:hover { border-color: #b0bcd8; box-shadow: 0 2px 8px rgba(0,0,0,0.06); background: #f7f9fc; }
+    .btn-google svg { width: 18px; height: 18px; flex-shrink: 0; }
+ 
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; color: var(--text-muted); font-size: 13px;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+ 
+    /* ── INPUT ── */
+    .field { margin-bottom: 20px; }
+    .field input {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: var(--font);
+      font-size: 14.5px;
+      color: var(--text-dark);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input::placeholder { color: var(--text-muted); }
+    .field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
+ 
+    /* ── CONTINUE BTN ── */
+    .btn-primary {
+      width: 100%; padding: 14px;
+      background: var(--primary); color: #fff;
+      font-family: var(--font); font-size: 15px; font-weight: 600;
+      border: none; border-radius: 10px; cursor: pointer;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { background: var(--primary-hover); box-shadow: 0 4px 16px rgba(26,86,219,0.28); }
+    .btn-primary:active { transform: scale(0.98); }
+ 
+    /* ── RIGHT PANEL ── */
+    .right-panel {
+      display: flex; flex-direction: column; align-items: flex-start;
+      padding-left: 20px;
+      animation: fadeUp 0.6s ease 0.1s both;
+    }
+ 
+    .cta-box { margin-bottom: 28px; }
+    .cta-box h2 { font-size: clamp(17px, 2vw, 22px); font-weight: 700; color: var(--text-dark); margin-bottom: 8px; letter-spacing: -0.3px; }
+    .cta-box p  { font-size: 14.5px; color: var(--text-muted); line-height: 1.5; max-width: 260px; }
+ 
+    .cta-link {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
+      font-size: 13.5px; font-weight: 600; color: var(--text-dark);
+      text-decoration: none; background: #fff; border-radius: 20px;
+      padding: 7px 14px 7px 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .cta-link:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.12); transform: translateX(2px); }
+    .cta-dot { width: 10px; height: 10px; border-radius: 50%; background: #f5a623; flex-shrink: 0; }
+    .cta-arrow { font-size: 14px; color: var(--text-muted); }
+ 
+    /* ── ISO ── */
+    .iso-wrap { width: 100%; max-width: 580px; }
+    .iso-wrap svg { width: 100%; height: auto; }
+ 
+    /* ── FOOTER ── */
+    footer {
+      padding: 16px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; color: var(--text-muted);
+      flex-wrap: wrap; gap: 8px; flex-shrink: 0;
+    }
+    .footer-left { display: flex; align-items: center; gap: 8px; }
+    .sec-badge {
+      width: 22px; height: 22px; border-radius: 50%; background: #dde3ee;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    footer a { color: var(--text-link); text-decoration: none; font-weight: 500; }
+    footer a:hover { text-decoration: underline; }
+ 
+    /* ── FAB ── */
+    .fab {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--primary); color: #fff; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(26,86,219,0.35);
+      transition: transform 0.2s, box-shadow 0.2s; z-index: 100;
+    }
+    .fab:hover { transform: scale(1.08); box-shadow: 0 6px 22px rgba(26,86,219,0.45); }
+ 
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+ 
+    /* Tablet landscape → stack */
+    @media (max-width: 960px) {
+      main {
+        grid-template-columns: 1fr;
+        padding: 24px 32px 32px;
+        gap: 24px;
+      }
+      .card { max-width: 540px; margin: 0 auto; padding: 40px 36px; }
+      .right-panel { padding-left: 0; max-width: 540px; margin: 0 auto; width: 100%; }
+      .iso-wrap { max-width: 440px; }
+    }
+ 
+    /* Tablet portrait */
+    @media (max-width: 700px) {
+      header { padding: 16px 24px; }
+      main { padding: 16px 20px 28px; gap: 20px; }
+      .card { padding: 36px 28px 30px; border-radius: 16px; }
+      .card h1 { font-size: 30px; letter-spacing: -1px; margin-bottom: 14px; }
+      footer { padding: 14px 20px; }
+    }
+ 
+    /* Mobile */
+    @media (max-width: 480px) {
+      header { padding: 14px 16px; }
+      main { padding: 12px 12px 24px; }
+      .card { padding: 28px 20px 24px; border-radius: 14px; }
+      .card h1 { font-size: 26px; margin-bottom: 12px; }
+      .signin-note { margin-bottom: 22px; }
+      .btn-google { width: 100%; justify-content: center; }
+      .cta-box p { max-width: 100%; }
+      .iso-wrap { max-width: 100%; }
+      footer { padding: 12px 16px; font-size: 12px; flex-direction: column; align-items: flex-start; gap: 6px; }
+      .fab { bottom: 14px; right: 14px; width: 40px; height: 40px; }
+    }
+ 
+    @media (max-width: 340px) {
+      .card { padding: 22px 14px 18px; }
+      .card h1 { font-size: 22px; }
+    </style>
+</head>
+<body>
+    <header>
+    <a class="logo" href="interface.html">
+      <div class="logo-img"><img src="/images/logo CW.png" alt=""></div>
+    </a>
+  </header>
+ 
+  <main>
+    <div class="card">
+      <h1>Start your investment journey</h1>
+      <p class="signin-note">Got an account? <a href="login.html">Sign In</a></p>
+ 
+      <button class="btn-google">
+        <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/>
+          <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332Z" fill="#FBBC05"/>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
+        </svg>
+        Sign up with Google
+      </button>
+ 
+      <div class="divider">or</div>
+ 
+      <div class="field">
+        <input type="email" placeholder="Email Address" autocomplete="email"/>
+      </div>
+ 
+      <button class="btn-primary">Continue</button>
+    </div>
+ 
+    <div class="right-panel">
+      <div class="cta-box">
+        <h2>Don't wait to start</h2>
+        <p>See how much you could have earned in the past few years</p>
+        <a class="cta-link" href="#">
+          <span class="cta-dot"></span>
+          See what you missed
+          <span class="cta-arrow">›</span>
+        </a>
+      </div>
+ 
+      <div class="iso-wrap">
+        <svg viewBox="0 0 620 440" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+          <defs>
+            <filter id="soft" x="-5%" y="-5%" width="110%" height="110%">
+              <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="rgba(0,0,0,0.08)"/>
+            </filter>
+          </defs>
+          <g opacity="0.55">
+            <polygon points="310,60 430,120 310,180 190,120" fill="#f0f3f8" stroke="#dde3ee" stroke-width="1"/>
+            <polygon points="190,120 310,180 190,240 70,180" fill="#f0f3f8" stroke="#dde3ee" stroke-width="1"/>
+            <polygon points="430,120 550,180 430,240 310,180" fill="#f0f3f8" stroke="#dde3ee" stroke-width="1"/>
+            <polygon points="310,180 430,240 310,300 190,240" fill="#eef1f6" stroke="#dde3ee" stroke-width="1"/>
+            <polygon points="190,240 310,300 190,360 70,300" fill="#eef1f6" stroke="#dde3ee" stroke-width="1"/>
+            <polygon points="430,240 550,300 430,360 310,300" fill="#eef1f6" stroke="#dde3ee" stroke-width="1"/>
+            <polygon points="550,180 670,240 550,300 430,240" fill="#eef1f6" stroke="#dde3ee" stroke-width="1"/>
+            <polygon points="310,300 430,360 310,420 190,360" fill="#eaecf3" stroke="#dde3ee" stroke-width="1"/>
+            <polygon points="190,360 310,420 190,480 70,420" fill="#eaecf3" stroke="#dde3ee" stroke-width="1"/>
+            <polygon points="430,360 550,420 430,480 310,420" fill="#eaecf3" stroke="#dde3ee" stroke-width="1"/>
+          </g>
+          <g opacity="0.3" stroke="#c5ccd8" stroke-width="1.5" fill="none">
+            <line x1="70" y1="180" x2="550" y2="420"/>
+            <line x1="190" y1="120" x2="670" y2="360"/>
+            <line x1="310" y1="60"  x2="310" y2="440"/>
+            <line x1="70"  y1="300" x2="550" y2="60"/>
+          </g>
+          <g filter="url(#soft)">
+            <polygon points="230,230 270,208 310,230 270,252" fill="#e2e8f5"/>
+            <polygon points="230,230 230,260 270,282 270,252" fill="#cdd5e8"/>
+            <polygon points="270,252 270,282 310,260 310,230" fill="#d6ddf0"/>
+          </g>
+          <g filter="url(#soft)">
+            <polygon points="290,200 330,178 370,200 330,222" fill="#dce3f3"/>
+            <polygon points="290,200 290,240 330,262 330,222" fill="#c5ceea"/>
+            <polygon points="330,222 330,262 370,240 370,200" fill="#cdd5ef"/>
+          </g>
+          <g filter="url(#soft)">
+            <polygon points="360,220 400,198 440,220 400,242" fill="#e4eaf6"/>
+            <polygon points="360,220 360,255 400,277 400,242" fill="#ccd4e8"/>
+            <polygon points="400,242 400,277 440,255 440,220" fill="#d4dced"/>
+          </g>
+          <g>
+            <ellipse cx="225" cy="345" rx="18" ry="7" fill="rgba(0,0,0,0.07)"/>
+            <rect x="221" y="325" width="8" height="20" rx="2" fill="#a0724a"/>
+            <polygon points="225,260 248,310 202,310" fill="#3d9e4f"/>
+            <polygon points="225,275 244,318 206,318" fill="#4bb563"/>
+            <polygon points="225,290 242,326 208,326" fill="#5dc574"/>
+          </g>
+          <g>
+            <ellipse cx="490" cy="395" rx="12" ry="5" fill="rgba(0,0,0,0.06)"/>
+            <rect x="487" y="378" width="6" height="16" rx="1.5" fill="#a0724a"/>
+            <polygon points="490,330 508,370 472,370" fill="#3d9e4f"/>
+            <polygon points="490,343 506,377 474,377" fill="#4bb563"/>
+            <polygon points="490,354 504,383 476,383" fill="#5dc574"/>
+          </g>
+          <g filter="url(#soft)">
+            <polygon points="420,280 450,264 480,280 450,296" fill="#f5a0b8"/>
+            <polygon points="420,280 420,305 450,321 450,296" fill="#e8849e"/>
+            <polygon points="450,296 450,321 480,305 480,280" fill="#ef92ac"/>
+          </g>
+          <g filter="url(#soft)">
+            <polygon points="470,260 500,244 530,260 500,276" fill="#90c4f5"/>
+            <polygon points="470,260 470,285 500,301 500,276" fill="#6aaeed"/>
+            <polygon points="500,276 500,301 530,285 530,260" fill="#7bbaf0"/>
+          </g>
+          <g filter="url(#soft)">
+            <polygon points="165,290 185,279 205,290 185,301" fill="#fbd38d"/>
+            <polygon points="165,290 165,308 185,319 185,301" fill="#f6ad55"/>
+            <polygon points="185,301 185,319 205,308 205,290" fill="#f9c06e"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </main>
+ 
+  <footer>
+    <div class="footer-left">
+      <div class="sec-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a93a6" stroke-width="2.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <span>Cowrywise is licensed by the SEC</span>
+    </div>
+    <a href="#">Need Help?</a>
+  </footer>
+ 
+  <button class="fab" aria-label="Chat">
+    <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  </button>
+  
+</body>
+</html>

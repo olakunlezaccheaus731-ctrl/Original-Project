@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cowrywise — Watch your money do more</title>
+  <link href="https://fonts.cdnfonts.com/css/rency" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-deep: #0b1f6b;
+      --blue-primary: #1a3bcc;
+      --blue-light: #d6e4f7;
+      --blue-pale: #eaf2fc;
+      --cream: #fef7ee;
+      --pink: #f4a7b9;
+      --yellow: #f5d87a;
+      --green-soft: #b8e6c1;
+      --purple-soft: #b0a8d8;
+      --orange-soft: #f5c9a0;
+      --bg: #f0f4fb;
+      --text-dark: #0b1f6b;
+      --text-muted: #6b7b99;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Rency', sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── ANNOUNCEMENT BAR ── */
+    .announcement {
+      background: var(--cream);
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #555;
+      border-bottom: 1px solid #e8ddd0;
+      font-family: 'Rency', sans-serif;
+    }
+    .announcement a {
+      color: var(--blue-primary);
+      font-weight: 600;
+      text-decoration: none;
+      font-family: 'Rency', sans-serif;
+    }
+    .announcement a::after { content: ' ↗'; font-size: 11px; }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(26,59,204,0.06);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--blue-deep);
+      font-weight: 700;
+      font-size: 20px;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--blue-primary);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .logo-icon::before {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border: 3px solid rgba(255,255,255,0.9);
+      border-radius: 50%;
+    }
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      width: 8px; height: 8px;
+      background: var(--cream);
+      border-radius: 50%;
+      top: 5px; left: 5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links li a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.2s;
+    }
+    .nav-links li a:hover { background: rgba(26,59,204,0.07); }
+    .nav-links li a .chevron {
+      font-size: 10px;
+      opacity: 0.6;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-login {
+      background: none;
+      border: none;
+      color: var(--blue-deep);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-login:hover { background: rgba(26,59,204,0.07); }
+
+    .btn-signup {
+      background: var(--blue-primary);
+      color: var(--white);
+      border: none;
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .btn-signup:hover { background: #1230a8; transform: translateY(-1px); }
+
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      width: 24px; height: 2px;
+      background: var(--blue-deep);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: calc(100vh - 96px);
+      display: grid;
+      grid-template-columns: 1fr 3fr 1fr;
+      align-items: center;
+      padding: 60px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle grid lines background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          to right,
+          rgba(26,59,204,0.04) 0, rgba(26,59,204,0.04) 1px,
+          transparent 1px, transparent 60px
+        ),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(26,59,204,0.04) 0, rgba(26,59,204,0.04) 1px,
+          transparent 1px, transparent 60px
+        );
+      pointer-events: none;
+    }
+
+    .hero-left, .hero-right {
+      height: 100%;
+      min-height: 460px;
+      display: flex;
+      align-items: flex-end;
+      position: relative;
+    }
+    .hero-right { justify-content: flex-end; align-items: flex-end; }
+
+    .hero-center {
+      text-align: center;
+      padding: 0 32px;
+      z-index: 2;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-center h1 {
+      font-family: 'Rency', sans-serif;
+      font-size: 50px;
+      font-weight: 100;
+      line-height: 1.08;
+      color: var(--blue-deep);
+      margin-bottom: 20px;
+      letter-spacing: -2px;
+    }
+
+    .hero-center p {
+      font-size: clamp(14px, 1.5vw, 17px);
+      color: var(--text-muted);
+      max-width: 440px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--blue-primary);
+      color: var(--white);
+      text-decoration: none;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(26,59,204,0.25);
+    }
+    .btn-cta:hover {
+      background: #1230a8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(26,59,204,0.35);
+    }
+    .btn-cta .arrow { font-size: 16px; }
+
+    /* ── ISOMETRIC ILLUSTRATIONS ── */
+    /* Left cluster */
+    .iso-left {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 220px;
+      animation: floatL 6s ease-in-out infinite;
+    }
+    .iso-right {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 220px;
+      animation: floatR 6s ease-in-out infinite 1s;
+    }
+
+    @keyframes floatL {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    @keyframes floatR {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+
+    /* ── BOTTOM DECORATIVE COINS ── */
+    .hero-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      max-width: 500px;
+    }
+
+    .trust-item {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+    .trust-item .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--blue-primary);
+      opacity: 0.4;
+    }
+
+    /* ── MOBILE MENU OVERLAY ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 999;
+      flex-direction: column;
+      padding: 24px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .close-btn {
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--blue-deep);
+      background: none;
+      border: none;
+    }
+    .mobile-nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    .mobile-nav-links li a {
+      display: block;
+      text-decoration: none;
+      color: var(--blue-deep);
+      font-size: 18px;
+      font-weight: 600;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--blue-light);
+    }
+    .mobile-nav-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 24px;
+    }
+    .mobile-nav-actions .btn-signup {
+      text-align: center;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 12px;
+    }
+    .mobile-nav-actions .btn-login {
+      text-align: center;
+      font-size: 16px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links, .nav-actions .btn-login, .nav-actions .btn-signup { display: none; }
+      .hamburger { display: flex; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        min-height: unset;
+        padding: 40px 24px 200px;
+        text-align: center;
+      }
+      .hero-left, .hero-right { display: none; }
+      .hero-center { padding: 0; }
+
+      .iso-left {
+        position: absolute;
+        bottom: 0; left: -20px;
+        width: 160px;
+        display: block;
+      }
+      .iso-right {
+        position: absolute;
+        bottom: 0; right: -20px;
+        width: 160px;
+        display: block;
+      }
+      .trust-bar { padding: 20px 24px; gap: 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-center h1 { font-size: 38px; letter-spacing: -1px; }
+      .iso-left, .iso-right { width: 120px; }
+      .trust-bar { flex-direction: column; gap: 12px; align-items: flex-start; }
+    }
+
+    /* ── GROW SECTION ── */
+    .grow-section {
+      background: var(--white);
+      padding: 80px 64px 72px;
+    }
+
+    .grow-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: start;
+      gap: 32px;
+      margin-bottom: 52px;
+    }
+
+    .grow-header h2 {
+      font-family: 'Rency', sans-serif;
+      font-size: 40px;
+      font-weight: 100;
+      color: var(--blue-deep);
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      grid-column: 1;
+    }
+
+    .grow-header-desc {
+      grid-column: 2;
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      padding-top: 8px;
+    }
+
+    .grow-header-action {
+      grid-column: 3;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding-top: 8px;
+    }
+
+    .btn-start {
+      background: var(--blue-primary);
+      color: var(--white);
+      text-decoration: none;
+      padding: 13px 28px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(26,59,204,0.22);
+    }
+    .btn-start:hover {
+      background: #1230a8;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(26,59,204,0.3);
+    }
+
+    /* Cards grid */
+    .grow-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .grow-card {
+      background: #f5f8fe;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(26,59,204,0.07);
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+    }
+    .grow-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(26,59,204,0.12);
+    }
+
+    .grow-card-label {
+      padding: 20px 22px 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--blue-deep);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: -0.2px;
+    }
+    .grow-card-label .card-arrow {
+      font-size: 14px;
+      color: var(--blue-primary);
+    }
+
+    .grow-card-illustration {
+      flex: 1;
+      min-height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 16px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .grow-card-img {
+      width: 100%;
+      height: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .grow-card-illustration svg {
+      width: 100%;
+      height: 100%;
+      max-height: 280px;
+    }
+
+    .showcase-img {
+      width: 100%;
+      height: 100%;
+      max-height: 520px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .grow-card-footer {
+      padding: 16px 20px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(4px);
+      border-top: 1px solid rgba(26,59,204,0.06);
+    }
+
+    .footer-icon {
+      width: 36px; height: 36px;
+      background: var(--white);
+      border-radius: 50%;
+      border: 1px solid var(--blue-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 15px;
+    }
+
+    .footer-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Responsive — grow section */
+    @media (max-width: 1024px) {
+      .grow-section { padding: 60px 32px; }
+      .grow-header { grid-template-columns: 1fr 1fr; row-gap: 20px; }
+      .grow-header h2 { grid-column: 1 / -1; }
+      .grow-header-desc { grid-column: 1; }
+      .grow-header-action { grid-column: 2; }
+    }
+
+    @media (max-width: 768px) {
+      .grow-section { padding: 52px 20px; }
+      .grow-header {
+        grid-template-columns: 1fr;
+        margin-bottom: 36px;
+      }
+      .grow-header h2,
+      .grow-header-desc,
+      .grow-header-action { grid-column: 1; }
+      .grow-header-action { justify-content: flex-start; }
+
+      .grow-cards { grid-template-columns: 1fr; gap: 16px; }
+      .grow-card-illustration { min-height: 200px; }
+    }
+
+    @media (max-width: 480px) {
+      .grow-section { padding: 40px 16px; }
+    }
+
+    /* ── TRUST SECTION ── */
+    .trust-section {
+      background: var(--white);
+      border-top: 1px solid rgba(26,59,204,0.08);
+      padding: 80px 64px;
+    }
+
+    .trust-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .trust-headline {
+      font-family: 'Rency', sans-serif;
+      font-size: 40px;
+      font-weight: 100;
+      color: var(--blue-deep);
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      grid-column: 1;
+    }
+
+    .trust-body {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    .trust-body strong {
+      color: var(--blue-deep);
+      font-weight: 700;
+    }
+
+    .trust-cta {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-invest {
+      background: var(--blue-primary);
+      color: var(--white);
+      text-decoration: none;
+      padding: 14px 30px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(26,59,204,0.22);
+    }
+    .btn-invest:hover {
+      background: #1230a8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(26,59,204,0.3);
+    }
+
+    @media (max-width: 1024px) {
+      .trust-section { padding: 60px 32px; }
+      .trust-inner {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 32px;
+      }
+      .trust-headline { grid-column: 1 / -1; }
+      .trust-cta { justify-content: flex-start; }
+    }
+
+    @media (max-width: 640px) {
+      .trust-section { padding: 52px 20px; }
+      .trust-inner { grid-template-columns: 1fr; gap: 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .trust-section { padding: 40px 16px; }
+    }
+
+    /* ── SHOWCASE SECTION ── */
+    .showcase-section {
+      background: var(--bg);
+      padding: 56px 48px 48px;
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    /* ─ LEFT: Phone panel card ─ */
+    .showcase-phone-panel {
+      background: #eaeff8;
+      border-radius: 28px;
+      padding: 36px 28px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+    }
+
+    .showcase-link {
+      margin-left: 100px;
+    }
+
+    .showcase-link:hover {
+      text-decoration: none;
+    }
+
+    .phone-mockup {
+      width: 210px;
+      background: #fff;
+      border-radius: 38px;
+      border: 9px solid #0f0f1a;
+      box-shadow: 0 28px 70px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.1);
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+      flex-shrink: 0;
+    }
+
+    .phone-notch {
+      width: 60px; height: 14px;
+      background: #0f0f1a;
+      border-radius: 0 0 10px 10px;
+      margin: 0 auto 12px;
+    }
+
+    .phone-screen { padding: 0 14px 20px; }
+
+    .phone-arc-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    .phone-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .phone-stat { font-size: 14px; font-weight: 800; color: var(--blue-deep); }
+
+    .phone-tagline {
+      font-size: 8.5px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .phone-divider { height: 1px; background: #eee; margin-bottom: 12px; }
+
+    .phone-perf-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .phone-perf-label { font-size: 9px; font-weight: 700; color: var(--blue-deep); }
+    .phone-perf-period {
+      font-size: 8px; color: var(--text-muted);
+      border: 1px solid #ddd; border-radius: 4px; padding: 2px 6px;
+    }
+    .phone-amount { font-size: 14px; font-weight: 800; color: var(--blue-primary); margin-bottom: 12px; }
+    .phone-bar {
+      background: linear-gradient(90deg, #1a3bcc, #4a7cff);
+      border-radius: 6px; height: 28px; width: 68px;
+    }
+
+    /* SEC badge */
+    .sec-badge {
+      position: absolute;
+      bottom: 108px; right: 20px;
+      width: 72px; z-index: 3;
+      filter: drop-shadow(0 4px 10px rgba(26,59,204,0.2));
+    }
+
+    /* blobs */
+    .blob-pink {
+      position: absolute; bottom: 0; left: -12px;
+      width: 120px; height: 100px;
+      background: radial-gradient(circle at 40% 55%, #ff6ed8, #e010a0);
+      border-radius: 58% 42% 60% 40% / 52% 62% 38% 48%;
+      opacity: 0.92;
+    }
+    .blob-yellow {
+      position: absolute; bottom: 0; right: 8px;
+      width: 96px; height: 86px;
+      background: radial-gradient(circle at 50% 40%, #ffe870, #f5c200);
+      border-radius: 50%;
+      opacity: 0.95;
+    }
+
+    .showcase-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 20px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--blue-primary);
+      text-decoration: none;
+      transition: gap 0.2s;
+      align-self: flex-start;
+      position: relative;
+      z-index: 4;
+    }
+    .showcase-link:hover { gap: 10px; text-decoration: underline; }
+
+    /* ─ MIDDLE column ─ */
+    .showcase-mid {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    
+
+    .mid-clarity {
+      background: #eaeff8;
+      border-radius: 28px;
+      padding: 30px 26px 28px;
+      flex: 0 0 auto;
+    }
+    .mid-clarity h3 {
+      font-family: 'Rency', sans-serif;
+      font-size: clamp(20px, 1.9vw, 27px);
+      font-weight: 800;
+      color: var(--blue-deep);
+      line-height: 1.18;
+    }
+    .mid-clarity h3 em {
+      font-style: normal;
+      color: var(--blue-primary);
+    }
+    .mid-clarity p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.72;
+      margin-top: 18px;
+    }
+
+    /* Photo card – illustrated joyful person */
+    .mid-photo {
+      border-radius: 28px;
+      overflow: hidden;
+      flex: 1;
+      min-height: 230px;
+      position: relative;
+      background: linear-gradient(160deg, #f5c8e8 0%, #e898d8 40%, #c458b8 100%);
+    }
+    .mid-photo svg {
+      width: 100%; height: 100%;
+      position: absolute; inset: 0;
+    }
+
+    /* ─ RIGHT: Values flower card ─ */
+    .showcase-values {
+      background: #f0f0f0;
+      border-radius: 28px;
+      padding: 28px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 520px;
+    }
+    .flower-wrap {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── RESPONSIVE showcase ── */
+    @media (max-width: 1100px) {
+      .showcase-section { padding: 40px 24px 36px; }
+      .showcase-grid { grid-template-columns: 1fr 1fr; }
+      .showcase-phone-panel { grid-column: 1 / -1; min-height: 400px; flex-direction: row; justify-content: center; gap: 36px; align-items: center; padding: 32px 36px 24px; }
+      .showcase-values { grid-column: 1 / -1; min-height: 320px; }
+    }
+
+    @media (max-width: 680px) {
+      .showcase-section { padding: 32px 16px 24px; }
+      .showcase-grid { grid-template-columns: 1fr; }
+      .showcase-phone-panel { flex-direction: column; min-height: 440px; padding: 32px 24px 0; grid-column: 1; }
+      .showcase-mid { gap: 14px; }
+      .mid-photo { min-height: 200px; }
+      .showcase-values { min-height: 300px; }
+    }
+
+    /* ── YOU NAME IT SECTION ── */
+    .nameit-section {
+      background: var(--white);
+      padding: 72px 0 64px;
+      overflow: hidden;
+    }
+
+    .nameit-heading {
+      font-family: 'Rency', sans-serif;
+      font-size: 50px;
+      font-weight: 100;
+      color: var(--blue-deep);
+      text-align: center;
+      letter-spacing: -1px;
+      margin-bottom: 48px;
+      padding: 0 24px;
+    }
+
+    /* Scroll track */
+    .nameit-track-wrap {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      /* fade edges */
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+
+    .nameit-track {
+      display: flex;
+      gap: 20px;
+      width: max-content;
+      animation: scrollCards 28s linear infinite;
+      padding: 8px 0 16px;
+    }
+
+    .nameit-track:hover { animation-play-state: paused; }
+
+    @keyframes scrollCards {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .nameit-card {
+      background: #f5f7fe;
+      border: 1px solid rgba(26,59,204,0.08);
+      border-radius: 20px;
+      padding: 28px 28px 32px;
+      width: 260px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: box-shadow 0.25s, transform 0.25s;
+      cursor: default;
+    }
+
+    /* .nameit-card:hover {
+      box-shadow: 0 12px 36px rgba(26,59,204,0.12);
+      transform: translateY(-4px);
+    } */
+
+    .nameit-quote {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--blue-primary);
+      line-height: 1;
+      font-style: italic;
+      font-family: 'Rency', sans-serif;
+    }
+
+    .nameit-card-text {
+      font-family: 'Rency', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--blue-primary);
+      line-height: 1.25;
+      letter-spacing: -0.3px;
+    }
+
+    @media (max-width: 640px) {
+      .nameit-section { padding: 52px 0 48px; }
+      .nameit-card { width: 220px; padding: 22px 20px 26px; }
+      .nameit-card-text { font-size: 17px; }
+    }
+
+    /* ── TIME IS MONEY SECTION ── */
+    .timemoney-section {
+      background: #1a3bcc;
+      padding: 72px 64px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle dot grid */
+    .timemoney-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+
+    .timemoney-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: start;
+      gap: 32px;
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timemoney-headline {
+      font-family: 'Rency', sans-serif;
+      font-size: 50px;
+      font-weight: 100;
+      color: #ffffff;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+    }
+
+    .timemoney-desc {
+      font-size: 14.5px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.7;
+    }
+
+    .timemoney-desc strong {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .timemoney-cta-wrap {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+    }
+
+    .btn-startinvest {
+      background: #ffffff;
+      color: var(--blue-primary);
+      text-decoration: none;
+      padding: 13px 26px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .btn-startinvest:hover {
+      background: #f0f4ff;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    /* ── Calculator cards row ── */
+    .timemoney-cards {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 20px;
+    }
+
+    /* Left input card */
+    .tm-card {
+      border-radius: 18px;
+      padding: 24px 24px 28px;
+    }
+
+    .tm-card-input {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(6px);
+    }
+
+    .tm-card-highlight {
+      background: #e8fff4;
+      position: relative;
+      overflow: visible;
+    }
+
+    .tm-card-bank {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .tm-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .tm-label span {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+
+    .tm-label .dropdown-hint {
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .tm-amount-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tm-amount {
+      font-family: 'Rency', sans-serif;
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .tm-currency-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Highlight card (center) */
+    .tm-label-dark {
+      font-size: 12px;
+      color: rgba(0,100,50,0.75);
+      margin-bottom: 20px;
+    }
+
+    .tm-divider-vert {
+      position: absolute;
+      top: 24px; bottom: 24px;
+      left: 50%;
+      width: 1px;
+      background: rgba(0,150,80,0.2);
+    }
+
+    .tm-highlight-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      position: relative;
+    }
+
+    .tm-highlight-col {
+      padding: 0 12px 0 0;
+    }
+    .tm-highlight-col:last-child { padding: 0 0 0 16px; }
+
+    .tm-highlight-amount {
+      font-family: 'Rency', sans-serif;
+      font-size: clamp(22px, 2.5vw, 34px);
+      font-weight: 800;
+      color: #00a854;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tm-highlight-amount .currency-sym {
+      font-size: 0.6em;
+      vertical-align: super;
+      font-weight: 700;
+    }
+
+    .tm-dot-green {
+      width: 8px; height: 8px;
+      background: #00d46a;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+      box-shadow: 0 0 6px #00d46a;
+      margin-left: 4px;
+    }
+
+    /* Starburst on highlight card */
+    .tm-starburst {
+      position: absolute;
+      top: -18px; right: -14px;
+      width: 48px; height: 48px;
+    }
+
+    /* Bank card */
+    .tm-bank-amount {
+      font-family: 'Rency', sans-serif;
+      font-size: clamp(22px, 2.5vw, 34px);
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: -0.5px;
+      margin-top: 20px;
+    }
+
+    .tm-bank-amount .currency-sym {
+      font-size: 0.6em;
+      vertical-align: super;
+    }
+
+    /* Footnote */
+    .timemoney-footnote {
+      font-size: 11.5px;
+      color: rgba(255,255,255,0.55);
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timemoney-footnote::before {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #00d46a;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .timemoney-section { padding: 56px 32px 44px; }
+      .timemoney-header { grid-template-columns: 1fr 1fr; row-gap: 24px; }
+      .timemoney-headline { grid-column: 1 / -1; }
+      .timemoney-cta-wrap { justify-content: flex-start; }
+    }
+
+    @media (max-width: 768px) {
+      .timemoney-section { padding: 48px 20px 36px; }
+      .timemoney-header { grid-template-columns: 1fr; }
+      .timemoney-cta-wrap { justify-content: flex-start; }
+      .timemoney-cards { grid-template-columns: 1fr; gap: 10px; }
+      .tm-highlight-cols { gap: 8px; }
+    }
+
+    @media (max-width: 480px) {
+      .timemoney-section { padding: 40px 16px 32px; }
+      .tm-highlight-amount { font-size: 22px; }
+    }
+
+    /* ── TESTIMONIALS SECTION ── */
+    .testimonials-section {
+      background: var(--white);
+      padding: 80px 64px 80px;
+      overflow: hidden;
+    }
+
+    .testimonials-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-bottom: 64px;
+    }
+
+    .testimonials-headline {
+      font-family: 'Rency', sans-serif;
+      font-size: 40px;
+      font-weight: 100;
+      color: var(--blue-deep);
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+    }
+
+    .testimonials-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      padding-top: 8px;
+    }
+
+    /* Cards row */
+    .testimonials-cards {
+      display: flex;
+      gap: 20px;
+      align-items: flex-end;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .tcard {
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .tcard:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 24px 56px rgba(0,0,0,0.18);
+    }
+
+    /* Staggered heights */
+    .tcard:nth-child(1) { width: 220px; height: 320px; transform: rotate(-2deg); }
+    .tcard:nth-child(2) { width: 200px; height: 280px; transform: rotate(1.5deg) translateY(30px); }
+    .tcard:nth-child(3) { width: 230px; height: 340px; transform: rotate(-1deg); }
+    .tcard:nth-child(4) { width: 210px; height: 300px; transform: rotate(2deg) translateY(20px); }
+
+    .tcard:nth-child(1):hover { transform: rotate(-2deg) translateY(-8px) scale(1.02); }
+    .tcard:nth-child(2):hover { transform: rotate(1.5deg) translateY(22px) scale(1.02); }
+    .tcard:nth-child(3):hover { transform: rotate(-1deg) translateY(-8px) scale(1.02); }
+    .tcard:nth-child(4):hover { transform: rotate(2deg) translateY(12px) scale(1.02); }
+
+    /* Photo placeholder using CSS gradients to mimic portrait photos */
+    .tcard-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .tcard-bg {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: linear-gradient(160deg, #d4c8bc 0%, #b8a898 60%, #9a8878 100%);
+    }
+
+    /* Each card gets a unique warm-neutral background */
+    .tcard:nth-child(1) .tcard-bg { background: linear-gradient(160deg, #d4c8bc 0%, #b8a898 60%, #9a8878 100%); }
+    .tcard:nth-child(2) .tcard-bg { background: linear-gradient(160deg, #c8c0b8 0%, #a89888 60%, #907868 100%); }
+    .tcard:nth-child(3) .tcard-bg { background: linear-gradient(160deg, #c0b8b0 0%, #a09088 60%, #88786c 100%); }
+    .tcard:nth-child(4) .tcard-bg { background: linear-gradient(160deg, #ccc4bc 0%, #aca498 60%, #908480 100%); }
+
+    /* Illustrated portrait silhouettes via SVG */
+    .tcard-portrait {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Play button overlay */
+    .tcard-play {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .tcard:hover .tcard-play {
+      background: #fff;
+      transform: scale(1.1);
+    }
+    .tcard-play svg { width: 12px; height: 12px; margin-left: 2px; }
+
+    /* Bottom quote overlay */
+    .tcard-quote {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 14px 14px 14px;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 60%, transparent 100%);
+      z-index: 3;
+    }
+
+    .tcard-quote-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.35;
+      margin-bottom: 4px;
+      font-style: italic;
+    }
+
+    .tcard-customer {
+      font-size: 10.5px;
+      color: rgba(255,255,255,0.72);
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .testimonials-section { padding: 64px 32px; }
+      .tcard:nth-child(1) { width: 190px; height: 280px; }
+      .tcard:nth-child(2) { width: 175px; height: 248px; }
+      .tcard:nth-child(3) { width: 200px; height: 300px; }
+      .tcard:nth-child(4) { width: 185px; height: 264px; }
+    }
+
+    @media (max-width: 768px) {
+      .testimonials-section { padding: 52px 20px; }
+      .testimonials-header { grid-template-columns: 1fr; gap: 16px; }
+      .testimonials-cards { gap: 14px; }
+      .tcard:nth-child(1),
+      .tcard:nth-child(3) { transform: none; }
+      .tcard:nth-child(2),
+      .tcard:nth-child(4) { transform: translateY(0); }
+      .tcard { width: calc(50% - 7px) !important; height: 240px !important; }
+    }
+
+    @media (max-width: 480px) {
+      .testimonials-section { padding: 40px 16px; }
+      .tcard { width: 100% !important; height: 220px !important; }
+      .tcard:nth-child(1),
+      .tcard:nth-child(2),
+      .tcard:nth-child(3),
+      .tcard:nth-child(4) { transform: none !important; }
+    }
+
+    /* ── FOOTER CTA SECTION ── */
+    .footer-cta-section {
+      background: var(--white);
+      border-top: 1px solid rgba(26,59,204,0.08);
+    }
+
+    /* Big CTA top */
+    .footer-cta-top {
+      text-align: center;
+      padding: 72px 32px 64px;
+      border-bottom: 1px solid rgba(26,59,204,0.07);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle isometric bg watermark */
+    .footer-cta-top::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          to right, rgba(26,59,204,0.03) 0, rgba(26,59,204,0.03) 1px, transparent 1px, transparent 48px
+        ),
+        repeating-linear-gradient(
+          to bottom, rgba(26,59,204,0.03) 0, rgba(26,59,204,0.03) 1px, transparent 1px, transparent 48px
+        );
+      pointer-events: none;
+    }
+
+    .footer-cta-sub {
+      font-size: clamp(18px, 2vw, 24px);
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-weight: 400;
+      position: relative;
+    }
+
+    .footer-cta-link {
+      display: inline-block;
+      font-family: 'Rency', sans-serif;
+      font-size: 60px;
+      font-weight: 100;
+      color: var(--blue-primary);
+      text-decoration: none;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      position: relative;
+      transition: letter-spacing 0.3s, opacity 0.2s;
+    }
+    .footer-cta-link:hover {
+      letter-spacing: -1px;
+      opacity: 0.85;
+    }
+
+    /* Footer body */
+    .footer-body {
+      display: grid;
+      grid-template-columns: 320px 1px 1fr;
+      gap: 0;
+      padding: 56px 64px 48px;
+      align-items: start;
+    }
+
+    /* Left side */
+    .footer-left {
+      padding-right: 48px;
+    }
+
+    .footer-stars {
+      font-size: 22px;
+      color: #f5a623;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .footer-trust {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .footer-app-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .app-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--white);
+      border: 1.5px solid #d0d8e8;
+      border-radius: 10px;
+      padding: 10px 16px;
+      text-decoration: none;
+      color: var(--blue-deep);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: fit-content;
+      min-width: 180px;
+    }
+    .app-btn:hover {
+      border-color: var(--blue-primary);
+      box-shadow: 0 4px 16px rgba(26,59,204,0.1);
+    }
+
+    .app-btn div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-btn-small {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .app-btn-big {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue-deep);
+      line-height: 1.3;
+    }
+
+    /* Vertical divider */
+    .footer-divider-v {
+      background: rgba(26,59,204,0.1);
+      width: 1px;
+      align-self: stretch;
+    }
+
+    /* Nav columns */
+    .footer-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      padding-left: 48px;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col-heading {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue-deep);
+      margin-bottom: 4px;
+      letter-spacing: 0.2px;
+    }
+
+    .footer-col a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      line-height: 1.4;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--blue-primary); }
+
+    /* Bottom bar */
+    .footer-bottom {
+      border-top: 1px solid rgba(26,59,204,0.07);
+      padding: 20px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .footer-bottom p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+
+    .footer-social a {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid #d0d8e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue-deep);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .footer-social a:hover {
+      border-color: var(--blue-primary);
+      color: var(--blue-primary);
+      background: rgba(26,59,204,0.05);
+    }
+
+    /* ── FOOTER RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .footer-body {
+        grid-template-columns: 260px 1px 1fr;
+        padding: 48px 32px 40px;
+      }
+      .footer-nav { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+      .footer-bottom { padding: 18px 32px; }
+    }
+
+    @media (max-width: 768px) {
+      .footer-cta-top { padding: 52px 24px 48px; }
+      .footer-body {
+        grid-template-columns: 1fr;
+        padding: 40px 24px 32px;
+        gap: 32px;
+      }
+      .footer-divider-v {
+        width: 100%; height: 1px;
+        align-self: auto;
+      }
+      .footer-left { padding-right: 0; }
+      .footer-app-btns { flex-direction: row; flex-wrap: wrap; }
+      .footer-nav { padding-left: 0; grid-template-columns: repeat(2, 1fr); }
+      .footer-bottom { padding: 16px 24px; flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+
+    @media (max-width: 480px) {
+      .footer-cta-top { padding: 40px 20px 36px; }
+      .footer-body { padding: 32px 16px 28px; }
+      .footer-nav { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .footer-bottom { padding: 14px 16px; }
+      .footer-app-btns { flex-direction: column; }
+    }
+
+    /* ── LEGAL FOOTER ── */
+    .legal-footer {
+      background: var(--white);
+      border-top: 1px solid rgba(26,59,204,0.08);
+    }
+
+    /* Social icons row */
+    .legal-social {
+      padding: 24px 64px 0;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .legal-social a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+    }
+    .legal-social a:hover { color: var(--blue-primary); }
+
+    /* Address row */
+    .legal-address-row {
+      padding: 28px 64px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .legal-address {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .legal-address .ng-flag {
+      font-size: 11px;
+      font-weight: 700;
+      color: #888;
+      letter-spacing: 0.5px;
+      border: 1px solid #ddd;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* SEC badge */
+    .legal-sec-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #d8e0f0;
+      border-radius: 10px;
+      padding: 8px 14px;
+      background: #f8faff;
+      flex-shrink: 0;
+    }
+
+    .sec-badge-icon {
+      width: 36px; height: 36px;
+      flex-shrink: 0;
+    }
+
+    .legal-sec-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .legal-sec-text span:first-child {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .legal-sec-text span:last-child {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--blue-deep);
+    }
+
+    /* Divider */
+    .legal-hr {
+      border: none;
+      border-top: 1px solid rgba(26,59,204,0.07);
+      margin: 0 64px;
+    }
+
+    /* Legal text block */
+    .legal-text-block {
+      padding: 28px 64px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .legal-para {
+      font-size: 12px;
+      color: #8898b0;
+      line-height: 1.75;
+    }
+
+    .legal-para a {
+      color: var(--blue-primary);
+      text-decoration: none;
+    }
+    .legal-para a:hover { text-decoration: underline; }
+
+    .legal-copyright {
+      font-size: 12px;
+      color: #8898b0;
+      padding-top: 4px;
+    }
+
+    .legal-copyright a {
+      color: var(--blue-primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .legal-copyright a:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .legal-social { padding: 20px 32px 0; }
+      .legal-address-row { padding: 24px 32px 20px; }
+      .legal-hr { margin: 0 32px; }
+      .legal-text-block { padding: 24px 32px 32px; }
+    }
+
+    @media (max-width: 768px) {
+      .legal-social { padding: 20px 24px 0; flex-wrap: wrap; }
+      .legal-address-row { padding: 20px 24px; flex-direction: column; align-items: flex-start; }
+      .legal-hr { margin: 0 24px; }
+      .legal-text-block { padding: 20px 24px 28px; }
+    }
+
+    @media (max-width: 480px) {
+      .legal-social { padding: 16px 16px 0; }
+      .legal-address-row { padding: 16px 16px; }
+      .legal-hr { margin: 0 16px; }
+      .legal-text-block { padding: 16px 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Announcement bar -->
+<div class="announcement">
+  Join the wealthy generation. <a href="#">Click here</a>
+</div>
+
+<!-- Navigation -->
+<nav>
+  <a href="#" class="logo">
+    <img src="/images/logo CW.png" alt="">
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#">Personal <span class="chevron">▾</span></a></li>
+    <li><a href="#">Business <span class="chevron">▾</span></a></li>
+    <li><a href="#">Developer <span class="chevron">▾</span></a></li>
+    <li><a href="#">Learn <span class="chevron">▾</span></a></li>
+  </ul>
+
+  <div class="nav-actions">
+    <a href="login.html" class="btn-login">Log in</a>
+    <a href="signup.html" class="btn-signup">Sign up for free</a>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-header">
+    <a href="#" class="logo">
+      <img src="/images/logo CW.png" alt="Cowrywise" style="height:32px; width:auto; display:block;" />
+    </a>
+    <button class="close-btn" onclick="toggleMenu()">✕</button>
+  </div>
+  <ul class="mobile-nav-links">
+    <li><a href="#">Personal</a></li>
+    <li><a href="#">Business</a></li>
+    <li><a href="#">Developer</a></li>
+    <li><a href="#">Learn</a></li>
+  </ul>
+  <div class="mobile-nav-actions">
+    <a href="signup.html" class="btn-signup">Sign up for free</a>
+    <a href="login.html" class="btn-login">Log in</a>
+  </div>
+</div>
+
+<!-- Hero Section -->
+<section class="hero">
+
+  <!-- Left isometric illustration -->
+  <div class="hero-left">
+    <svg class="iso-left" viewBox="0 0 220 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Stair blocks left -->
+      <g opacity="0.85">
+        <!-- Block 1 (bottom) -->
+        <polygon points="20,260 100,220 100,300 20,340" fill="#c6dff5"/>
+        <polygon points="100,220 160,250 160,330 100,300" fill="#a8ccec"/>
+        <polygon points="20,260 100,220 160,250 80,290" fill="#d8eaf9"/>
+        <!-- Block 2 (mid) -->
+        <polygon points="40,200 120,160 120,240 40,280" fill="#c6dff5"/>
+        <polygon points="120,160 180,190 180,270 120,240" fill="#a8ccec"/>
+        <polygon points="40,200 120,160 180,190 100,230" fill="#d8eaf9"/>
+        <!-- Block 3 (top) -->
+        <polygon points="60,140 140,100 140,180 60,220" fill="#c6dff5"/>
+        <polygon points="140,100 200,130 200,210 140,180" fill="#a8ccec"/>
+        <polygon points="60,140 140,100 200,130 120,170" fill="#d8eaf9"/>
+        <!-- Pink coin -->
+        <ellipse cx="95" cy="108" rx="30" ry="16" fill="#f4a7b9" opacity="0.9"/>
+        <ellipse cx="95" cy="104" rx="30" ry="16" fill="#f7bfcc"/>
+        <ellipse cx="95" cy="104" rx="22" ry="11" fill="#f4a7b9" opacity="0.5"/>
+      </g>
+      <!-- Green coin bottom left -->
+      <ellipse cx="55" cy="310" rx="28" ry="15" fill="#b8e6c1" opacity="0.85"/>
+      <ellipse cx="55" cy="306" rx="28" ry="15" fill="#ccefd2"/>
+      <ellipse cx="55" cy="306" rx="20" ry="10" fill="#b8e6c1" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <!-- Center content -->
+  <div class="hero-center">
+    <h1>Watch your money<br>do more</h1>
+    <p>One app. All your savings and investment needs. Trusted by individuals, HNIs, and corporates.</p>
+    <a href="#" class="btn-cta">
+      Start building wealth
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+  <!-- Right isometric illustration -->
+  <div class="hero-right">
+    <svg class="iso-right" viewBox="0 0 220 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g opacity="0.85">
+        <!-- Block 1 (bottom) -->
+        <polygon points="60,260 140,220 140,300 60,340" fill="#c6dff5"/>
+        <polygon points="140,220 200,250 200,330 140,300" fill="#a8ccec"/>
+        <polygon points="60,260 140,220 200,250 120,290" fill="#d8eaf9"/>
+        <!-- Block 2 (mid) -->
+        <polygon points="40,200 120,160 120,240 40,280" fill="#c6dff5"/>
+        <polygon points="120,160 180,190 180,270 120,240" fill="#a8ccec"/>
+        <polygon points="40,200 120,160 180,190 100,230" fill="#d8eaf9"/>
+        <!-- Block 3 (top) -->
+        <polygon points="20,140 100,100 100,180 20,220" fill="#c6dff5"/>
+        <polygon points="100,100 160,130 160,210 100,180" fill="#a8ccec"/>
+        <polygon points="20,140 100,100 160,130 80,170" fill="#d8eaf9"/>
+        <!-- Yellow coin -->
+        <ellipse cx="110" cy="108" rx="30" ry="16" fill="#e8c840" opacity="0.9"/>
+        <ellipse cx="110" cy="104" rx="30" ry="16" fill="#f5d87a"/>
+        <ellipse cx="110" cy="104" rx="22" ry="11" fill="#e8c840" opacity="0.5"/>
+      </g>
+      <!-- Purple coin bottom right -->
+      <ellipse cx="165" cy="305" rx="28" ry="15" fill="#b0a8d8" opacity="0.85"/>
+      <ellipse cx="165" cy="301" rx="28" ry="15" fill="#c8c2e8"/>
+      <ellipse cx="165" cy="301" rx="20" ry="10" fill="#b0a8d8" opacity="0.5"/>
+      <!-- Small leaf/plant detail on purple coin -->
+      <path d="M158,296 Q165,286 172,296" stroke="#8878c0" stroke-width="1.5" fill="none"/>
+      <path d="M165,296 L165,302" stroke="#8878c0" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <!-- Bottom center coins -->
+  <svg class="hero-bottom" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:55%;max-width:460px;">
+    <!-- Orange diamond shape -->
+    <polygon points="200,20 250,60 200,100 150,60" fill="#f5c9a0" opacity="0.7"/>
+    <polygon points="200,30 240,60 200,90 160,60" fill="#f8d9bc" opacity="0.6"/>
+    <!-- Blue arc -->
+    <path d="M240,90 Q260,30 310,50 Q330,58 310,80" stroke="#7fb3e8" stroke-width="18" fill="none" stroke-linecap="round" opacity="0.7"/>
+    <path d="M240,90 Q260,30 310,50 Q330,58 310,80" stroke="#a8ccf0" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.5"/>
+  </svg>
+</section>
+
+
+<!-- ── GROW SECTION ── -->
+<section class="grow-section">
+
+  <div class="grow-header">
+    <h2>How would you like<br>to grow?</h2>
+    <p class="grow-header-desc">All your wealth-building tools, finally in one app. Save automatically for the things you care about and grow your wealth the smart way.</p>
+    <div class="grow-header-action">
+      <a href="#" class="btn-start">Start now</a>
+    </div>
+  </div>
+
+  <div class="grow-cards">
+
+    <!-- SAVINGS CARD -->
+    <div class="grow-card">
+      <div class="grow-card-label">Savings <span class="card-arrow">→</span></div>
+      <div class="grow-card-illustration">
+        <img class="grow-card-img" src="/images/imageye___-_imgi_1_home-product-savings.png" alt="Savings" onerror="this.style.display='none'" />
+      </div>
+      <div class="grow-card-footer">
+        <div class="footer-icon">↗</div>
+        <p class="footer-text">Automate savings for your important goals, from simple milestones to big dreams and earn steady returns</p>
+      </div>
+    </div>
+
+    <!-- MUTUAL FUNDS CARD -->
+    <div class="grow-card">
+      <div class="grow-card-label">Mutual Funds <span class="card-arrow">→</span></div>
+      <div class="grow-card-illustration">
+        <img class="grow-card-img" src="/images/imageye___-_imgi_2_home-product-mutual-funds.png" alt="Mutual Funds" onerror="this.style.display='none'" />
+      </div>
+      <div class="grow-card-footer">
+        <div class="footer-icon">↗</div>
+        <p class="footer-text">Smart returns without guesswork. Our mutual funds handle it, letting you focus on your goals.</p>
+      </div>
+    </div>
+
+    <!-- STOCKS CARD -->
+    <div class="grow-card">
+      <div class="grow-card-label">Stocks <span class="card-arrow">→</span></div>
+      <div class="grow-card-illustration">
+        <img class="grow-card-img" src="/images/imageye___-_imgi_3_home-product-stocks.png" alt="Stocks" onerror="this.style.display='none'" />
+      </div>
+      <div class="grow-card-footer">
+        <div class="footer-icon">↗</div>
+        <p class="footer-text">Co-own Nigeria's top companies, from market leaders to newcomers and grow with them.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── TRUST SECTION ── -->
+<section class="trust-section">
+  <div class="trust-inner">
+    <h2 class="trust-headline">Built on trust.<br>Backed by results.</h2>
+    <p class="trust-body">
+      We handle money the way it should be, <strong>responsibly</strong>. We're
+      regulated by the SEC and built for transparency. No hidden
+      tricks, no risky plays, just access to assets designed to grow
+      your wealth the right way.
+    </p>
+    <div class="trust-cta">
+      <a href="#" class="btn-invest">Start investing</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── SHOWCASE SECTION ── -->
+<section class="showcase-section">
+  <div class="showcase-grid">
+
+    <!-- LEFT: Phone mockup panel -->
+    <div class="showcase-phone-panel">
+      <img class="showcase-img" src="/images/imageye___-_imgi_4_cowrywise-app-screen-home-2025.png" alt="Showcase Phone" onerror="this.style.display='none'" />
+    </div>
+
+    <!-- MIDDLE column -->
+    <div class="showcase-mid">
+      <!-- Clarity card -->
+      <div class="mid-clarity">
+        <h3>Grow with clarity,<br><em>not confusion.</em></h3>
+        <p>What's better than watching your money grow in real time? Tracking your investments, savings, and returns without the guesswork.</p>
+      </div>
+
+      <!-- Photo card -->
+      <div class="mid-photo">
+        <img class="showcase-img" src="/images/imageye___-_imgi_6_girl-face-model.png" alt="Showcase Photo" onerror="this.style.display='none'" />
+      </div>
+    </div>
+
+    <!-- RIGHT: Values flower -->
+    <div class="showcase-values">
+      <img class="showcase-img" src="/images/imageye___-_imgi_7_flowers.png" alt="Showcase Values" onerror="this.style.display='none'" />
+    </div>
+
+  </div>
+</section>
+ <a href="#" class="showcase-link">Our approach to security &amp; regulation →</a>
+
+<!-- ── YOU NAME IT SECTION ── -->
+<section class="nameit-section">
+  <h2 class="nameit-heading">You name it, we've figured it out.</h2>
+
+  <div class="nameit-track-wrap">
+    <div class="nameit-track">
+      <!-- First set of cards -->
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Automate and grow my savings</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Access Naira &amp; USD investments</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Get better returns on my money</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Invest my business cash</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Invest in mutual funds</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Buy Nigerian &amp; US stocks</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Save towards a house</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Build an emergency fund</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Save in dollars and earn</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Grow my wealth passively</p>
+      </div>
+
+      <!-- Duplicate set for seamless loop -->
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Automate and grow my savings</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Access Naira &amp; USD investments</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Get better returns on my money</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Invest my business cash</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Invest in mutual funds</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Buy Nigerian &amp; US stocks</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Save towards a house</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Build an emergency fund</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Save in dollars and earn</p>
+      </div>
+      <div class="nameit-card">
+        <span class="nameit-quote">"</span>
+        <p class="nameit-card-text">Grow my wealth passively</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TIME IS MONEY SECTION ── -->
+<section class="timemoney-section">
+
+  <div class="timemoney-header">
+    <h2 class="timemoney-headline">Time really is<br>money</h2>
+    <p class="timemoney-desc">
+      <strong>Sometimes the best time to invest was yesterday. The next best? Today.</strong><br>
+      See how your money could've grown in hindsight and why waiting costs more than you think.
+    </p>
+    <div class="timemoney-cta-wrap">
+      <a href="#" class="btn-startinvest">Start investing</a>
+    </div>
+  </div>
+
+  <div class="timemoney-cards">
+
+    <!-- LEFT: Input card -->
+    <div class="tm-card tm-card-input">
+      <p class="tm-label">
+        If you invested&nbsp;<span>every month</span>&nbsp;▾&nbsp;&nbsp;<span>3 years ago</span>&nbsp;▾
+      </p>
+      <div class="tm-amount-row">
+        <span class="tm-amount">100,000</span>
+        <span class="tm-currency-badge">Naira &nbsp;▾</span>
+      </div>
+    </div>
+
+    <!-- CENTER: Highlight card -->
+    <div class="tm-card tm-card-highlight">
+      <!-- Starburst -->
+      <svg class="tm-starburst" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24,2 L26.5,18 L38,8 L29,22 L46,22 L31,28 L42,40 L26,32 L26,46 L24,30 L22,46 L22,32 L6,40 L17,28 L2,22 L19,22 L10,8 L21.5,18 Z" fill="#00d46a"/>
+      </svg>
+
+      <div class="tm-highlight-cols">
+        <div class="tm-highlight-col">
+          <p class="tm-label-dark">Today, you'd have</p>
+          <div class="tm-highlight-amount">
+            <span class="currency-sym">₦</span>4,367,631 <span class="tm-dot-green"></span>
+          </div>
+        </div>
+        <div style="position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(0,150,80,0.15);"></div>
+        <div class="tm-highlight-col" style="padding:0 0 0 20px;">
+          <p class="tm-label-dark">..earned returns on Cowrywise</p>
+          <div class="tm-highlight-amount">
+            <span class="currency-sym">₦</span>767,631 <span class="tm-dot-green"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Bank card -->
+    <div class="tm-card tm-card-bank">
+      <p class="tm-label" style="margin-bottom:0;">..earned with your bank</p>
+      <div class="tm-bank-amount">
+        <span class="currency-sym">₦</span>28,800
+      </div>
+    </div>
+
+  </div>
+
+  <p class="timemoney-footnote">
+    Estimations are based on the average performance of conservative mutual funds on Cowrywise from 2019. Calculation excludes processing fees.
+  </p>
+
+</section>
+
+<!-- ── TESTIMONIALS SECTION ── -->
+<section class="testimonials-section">
+
+  <div class="testimonials-header">
+    <h2 class="testimonials-headline">Millions of customers<br>can't be wrong</h2>
+    <p class="testimonials-desc">Your goals are personal. That's why over two million Nigerians trust Cowrywise to help them grow, their way.</p>
+  </div>
+
+  <div class="testimonials-cards">
+
+    <!-- Card 1 -->
+    <div class="tcard">
+      <img class="tcard-img" src="images/imageye___-_imgi_8_moyosoluwa.jpg" alt="Moyosoluwa" onerror="this.style.display='none'" />
+      <div class="tcard-play">
+        <svg viewBox="0 0 12 12" fill="none"><path d="M3,2 L10,6 L3,10 Z" fill="#1a3bcc"/></svg>
+      </div>
+      <div class="tcard-quote">
+        <p class="tcard-quote-text">"It impacted my finances positively."</p>
+        <p class="tcard-customer">Moyosoluwa / customer since '21</p>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="tcard">
+      <img class="tcard-img" src="/images/imageye___-_imgi_9_conscience.jpg" alt="Conscience" onerror="this.style.display='none'" />
+      <div class="tcard-play">
+        <svg viewBox="0 0 12 12" fill="none"><path d="M3,2 L10,6 L3,10 Z" fill="#1a3bcc"/></svg>
+      </div>
+      <div class="tcard-quote">
+        <p class="tcard-quote-text">"Makes my money work for me"</p>
+        <p class="tcard-customer">Conscience / customer since '20</p>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="tcard">
+      <img class="tcard-img" src="/images/imageye___-_imgi_10_funmilola.jpg" alt="Funmilola" onerror="this.style.display='none'" />
+      <div class="tcard-play">
+        <svg viewBox="0 0 12 12" fill="none"><path d="M3,2 L10,6 L3,10 Z" fill="#1a3bcc"/></svg>
+      </div>
+      <div class="tcard-quote">
+        <p class="tcard-quote-text">"Helped improve my saving habits."</p>
+        <p class="tcard-customer">Funmilola / customer since '20</p>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="tcard">
+      <img class="tcard-img" src="/images/imageye___-_imgi_11_oyindamola.jpg" alt="Oyindamola" onerror="this.style.display='none'" />
+      <div class="tcard-play">
+        <svg viewBox="0 0 12 12" fill="none"><path d="M3,2 L10,6 L3,10 Z" fill="#1a3bcc"/></svg>
+      </div>
+      <div class="tcard-quote">
+        <p class="tcard-quote-text">"Helped me stay consistent"</p>
+        <p class="tcard-customer">Oyindamola / customer since '23</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CTA + FOOTER SECTION ── -->
+<section class="footer-cta-section">
+
+  <!-- Big CTA -->
+  <div class="footer-cta-top">
+    <p class="footer-cta-sub">Your future won't wait.</p>
+    <a href="#" class="footer-cta-link">→ Start growing today</a>
+  </div>
+
+  <!-- Footer body -->
+  <div class="footer-body">
+
+    <!-- Left: rating + app buttons -->
+    <div class="footer-left">
+      <div class="footer-stars">★★★★★</div>
+      <p class="footer-trust">Trusted by millions of Nigerians like you.</p>
+
+      <div class="footer-app-btns">
+        <a href="#" class="app-btn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3,20.5 L13.5,10 L3,3.5 C2.4,3.8 2,4.4 2,5.2 L2,18.8 C2,19.6 2.4,20.2 3,20.5 Z" fill="#4285F4"/><path d="M16.5,13 L19.4,11.4 C20.2,11 20.2,9.8 19.4,9.4 L16.5,7.8 L13.5,10 L16.5,13 Z" fill="#FBBC04"/><path d="M3,20.5 C3.3,20.7 3.7,20.8 4.1,20.6 L13.5,13 L10.5,10 Z" fill="#EA4335" opacity="0.9"/><path d="M3,3.5 L13.5,10 L16.5,7 L4.1,3.4 C3.7,3.2 3.3,3.3 3,3.5 Z" fill="#34A853"/></svg>
+          <div>
+            <span class="app-btn-small">Get it on</span>
+            <span class="app-btn-big">Play Store</span>
+          </div>
+        </a>
+        <a href="#" class="app-btn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M16.5,1.5 C16.5,1.5 14,2 12,4.5 C10,7 10.5,9.5 10.5,9.5 C10.5,9.5 13,9.8 15,7.3 C17,4.8 16.5,1.5 16.5,1.5 Z" fill="#555"/><path d="M12,10 C10,10 6,11 4.5,14.5 C3,18 4.5,21.5 6,22.5 C7.5,23.5 8.5,22.5 10,22.5 C11.5,22.5 12,23 13.5,23 C15,23 16,21.5 17.5,20 C18.5,18.5 19,17 19,17 C19,17 16.5,16 15.5,13.5 C14.5,11 16,10 16,10 C16,10 14,10 12,10 Z" fill="#555"/></svg>
+          <div>
+            <span class="app-btn-small">Download on</span>
+            <span class="app-btn-big">App Store</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="footer-divider-v"></div>
+
+    <!-- Right: nav columns -->
+    <div class="footer-nav">
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Press</a>
+        <a href="#">Careers</a>
+        <a href="#">Ambassadors</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Product</h4>
+        <a href="#">Savings</a>
+        <a href="#">Mutual funds</a>
+        <a href="#">Stocks</a>
+        <a href="#">Kids</a>
+        <a href="#">Embed API</a>
+        <a href="#">Sprout</a>
+        <a href="#">Halal</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Resources</h4>
+        <a href="#">Media</a>
+        <a href="#">Security</a>
+        <a href="#">FAQs</a>
+        <a href="#">IMS Policy</a>
+        <a href="#">Complaints</a>
+        <a href="#">Vulnerability policy</a>
+        <a href="#">Simplified</a>
+        <a href="#">Engineering</a>
+        <a href="#">Glossary</a>
+        <a href="#">Estimate interest</a>
+        <a href="#">NGX News</a>
+        <a href="#">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Contact</h4>
+        <a href="mailto:support@cowrywise.com">support@cowrywise.com</a>
+        <a href="#">07000COWRYWISE</a>
+        <a href="#">WhatsApp</a>
+      </div>
+    </div>
+
+  </div>
+
+
+
+</section>
+
+<!-- ── LEGAL FOOTER ── -->
+<footer class="legal-footer">
+
+  <!-- Social icons row -->
+  <div class="legal-social">
+    <!-- Twitter/X -->
+    <a href="#" aria-label="Twitter">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <!-- Facebook -->
+    <a href="#" aria-label="Facebook">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    </a>
+    <!-- WhatsApp -->
+    <a href="#" aria-label="WhatsApp">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    <!-- Telegram -->
+    <a href="#" aria-label="Telegram">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+    </a>
+    <!-- Instagram -->
+    <a href="#" aria-label="Instagram">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+    </a>
+    <!-- YouTube -->
+    <a href="#" aria-label="YouTube">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    </a>
+  </div>
+
+  <!-- Address + SEC badge row -->
+  <div class="legal-address-row">
+    <div class="legal-address">
+      <span class="ng-flag">NG</span>
+      <span>5C Reverend Ogunbiyi Street, Ikeja GRA, Lagos Nigeria.</span>
+    </div>
+    <div class="legal-sec-badge">
+      <img src="/images/SEC.png" alt="SEC Licensed Fund Manager Logo" class="sec-badge-icon" />
+      <div class="legal-sec-text">
+        <span>SEC licensed</span>
+        <span>Fund Manager</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="legal-hr"/>
+
+  <!-- Legal text -->
+  <div class="legal-text-block">
+    <p class="legal-para">
+      Cowrywise Financial Technology Limited ('Cowrywise') is a Fund/Portfolio Manager duly licensed by the Securities and Exchange Commission (SEC) of Nigeria, with License #1940 and its sister company, CFTL Digital Services Limited, is a Digital Sub-Broker duly licensed by the SEC, with License #3005.
+    </p>
+    <p class="legal-para">
+      Our mutual funds are managed by our fund management partners and made available to our clients through our web and mobile applications. The fund manager for each mutual fund is disclosed on every mutual fund's profile page. Any historical returns or expected returns are hypothetical in nature and may not reflect actual future performance. <a href="#">View full list of available mutual funds on Cowrywise.</a>
+    </p>
+    <p class="legal-para">
+      The content on this website does not constitute a complete description of Cowrywise's fund management services. By creating a Cowrywise account, you accept Cowrywise's <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>, and by using the stocks feature on Cowrywise, you accept CFTL Digital's <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.
+    </p>
+    <p class="legal-para">
+      Google Play and the Google Play logo are trademarks of Google LLC. Apple, the Apple logo, and iPhone are trademarks of Apple Inc. registered in the U.S.
+    </p>
+    <p class="legal-copyright">
+      © 2026 Cowrywise Financial Technology. All rights reserved. RC 1419869. <a href="#">NDPC Audited and Compliant</a>.
+    </p>
+  </div>
+
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.body.style.overflow =
+      document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+  }
+</script>
+</body>
+</html>
